@@ -1,4 +1,97 @@
+/*<!-- Material Symbols Outlined -->*/
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+
 @import "tailwindcss";
 
-/* Modo oscuro por clase (la clase "dark" se pone en <html> desde ThemeContext) */
+/* 1. Habilitar la variante 'dark' basada en la clase .dark en el HTML */
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* 2. Definición de tokens de Tailwind v4 */
+@theme {
+  --color-surface: var(--bg-surface);
+  --color-surface-container: var(--bg-surface-container);
+  --color-surface-container-high: var(--bg-surface-container-high);
+  --color-surface-container-highest: var(--bg-surface-container-highest);
+
+  --color-on-surface: var(--text-on-surface);
+  --color-on-surface-variant: var(--text-on-surface-variant);
+  --color-outline-variant: var(--border-outline-variant);
+
+  --color-primary: var(--brand-primary);
+  --color-on-primary: var(--brand-on-primary);
+  --color-primary-fixed-dim: var(--brand-primary-dim);
+
+  --color-tertiary: var(--brand-tertiary);
+  --color-tertiary-container: var(--brand-tertiary-container);
+
+  --color-error: var(--brand-error);
+  --color-error-container: var(--brand-error-container);
+  --color-on-error-container: var(--brand-on-error-container);
+
+  /* Tipografía */
+  --font-syne: 'Syne', sans-serif;
+  --font-dm-sans: 'DM Sans', sans-serif;
+  --radius-default: 1rem;
+}
+
+/* 3. Modo Claro (Valores por defecto) */
+:root {
+  --bg-surface: #f8fafc;
+  --bg-surface-container: #ffffff;
+  --bg-surface-container-high: #f1f5f9;
+  --bg-surface-container-highest: #e2e8f0;
+
+  --text-on-surface: #0f172a;
+  --text-on-surface-variant: #475569;
+  --border-outline-variant: #cbd5e1;
+
+  --brand-primary: #059669;
+  --brand-on-primary: #ffffff;
+  --brand-primary-dim: #047857;
+
+  --brand-tertiary: #d97706;
+  --brand-tertiary-container: #fef3c7;
+
+  --brand-error: #dc2626;
+  --brand-error-container: #fee2e2;
+  --brand-on-error-container: #991b1b;
+}
+
+/* 4. Modo Oscuro (Se activa cuando la clase 'dark' está en <html>) */
+.dark {
+  --bg-surface: #031427;
+  --bg-surface-container: #102034;
+  --bg-surface-container-high: #1b2b3f;
+  --bg-surface-container-highest: #26364a;
+
+  --text-on-surface: #d3e4fe;
+  --text-on-surface-variant: #bbcabf;
+  --border-outline-variant: #3c4a42;
+
+  --brand-primary: #4edea3;
+  --brand-on-primary: #003824;
+  --brand-primary-dim: #4edea3;
+
+  --brand-tertiary: #ffb95f;
+  --brand-tertiary-container: #e29100;
+
+  --brand-error: #ffb4ab;
+  --brand-error-container: #93000a;
+  --brand-on-error-container: #ffdad6;
+}
+
+/* 5. Estilos globales base */
+body {
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-dm-sans);
+  transition: background-c
+olor 0.2s ease, color 0.2s ease;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-syne);
+}
