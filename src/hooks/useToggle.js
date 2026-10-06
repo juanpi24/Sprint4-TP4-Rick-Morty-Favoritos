@@ -1,18 +1,12 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-/**
- * Hook para manejar un estado booleano de tipo toggle (activar/desactivar).
- * Se usa para el modal de favoritosy cualquier otro panel simple abierto/cerrado.
- *
- * @param {boolean} initialState - Estado inicial del toggle.
- * @returns {Array} [estado, toggle, abrir, cerrar]
- */
+// Estado booleano reutilizable: [estado, toggle, abrir, cerrar]
 export function useToggle(initialState = false) {
-  const [state, setState] = useState(initialState);
+  const [estado, setEstado] = useState(initialState);
 
-  const toggle = () => setState((prev) => !prev);
-  const setOpen = () => setState(true);
-  const setClose = () => setState(false);
+  const toggle = () => setEstado((actual) => !actual);
+  const abrir = () => setEstado(true);
+  const cerrar = () => setEstado(false);
 
-  return [state, toggle, setOpen, setClose];
+  return [estado, toggle, abrir, cerrar];
 }
