@@ -18,7 +18,7 @@ export function Buscador() {
         onChange={(e) => setBusqueda(e.target.value)}
         placeholder="Buscar personaje (Rick, Morty, Summer...)"
         aria-label="Buscar personaje"
-        className="w-full rounded-lg border border-slate-300 bg-white p-3 dark:border-slate-600 dark:bg-slate-800"
+        className="w-full rounded-lg border border-outline-variant bg-surface-container p-3 text-on-surface placeholder:text-on-surface-variant"
       />
 
       {loading && <Cargando />}

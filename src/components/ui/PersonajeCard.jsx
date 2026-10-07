@@ -5,7 +5,7 @@ export function PersonajeCard({ personaje }) {
   const favorito = esFavorito(personaje.id);
 
   return (
-    <article className="overflow-hidden rounded-xl bg-white shadow dark:bg-slate-800">
+    <article className="overflow-hidden rounded-default border border-outline-variant bg-surface-container">
       <img
         src={personaje.image}
         alt={personaje.name}
@@ -14,21 +14,18 @@ export function PersonajeCard({ personaje }) {
       />
       <div className="space-y-1 p-4">
         <h3 className="text-lg font-bold">{personaje.name}</h3>
-        <p className="text-sm text-slate-600 dark:text-slate-300">
+        <p className="text-sm text-on-surface-variant">
           {personaje.species} · {personaje.status}
         </p>
-        <p className="text-sm text-slate-600 dark:text-slate-300">
+        <p className="text-sm text-on-surface-variant">
           Origen: {personaje.origin.name}
         </p>
         <button
           onClick={() => toggleFavorito(personaje)}
           aria-pressed={favorito}
-          className={`mt-2 w-full rounded-lg px-3 py-2 text-sm font-semibold ${
-            favorito
-              ? "bg-amber-400 text-slate-900 hover:bg-amber-300"
-              : "bg-emerald-600 text-white hover:bg-emerald-700"
-          }`}
-        >
+          className={`mt-2 w-full rounded-lg px-3 py-2 text-sm font-semibold text-on-primary hover:opacity-90 ${
+               favorito ? "bg-tertiary" : "bg-primary"
+            }`}>
           {favorito ? "★ En favoritos" : "☆ Agregar a favoritos"}
         </button>
       </div>
