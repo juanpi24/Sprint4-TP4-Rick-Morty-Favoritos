@@ -1,7 +1,7 @@
 import { useThemeContext } from "../../context/ThemeContext.jsx";
 import { useFavoritosContext } from "../../context/FavoritosContext.jsx";
 
-export default function Navbar({ onAbrirFavoritos }) {
+export function Navbar({ onAbrirFavoritos }) {
   const { isDark, toggleTheme } = useThemeContext();
   const { favoritos } = useFavoritosContext();
 

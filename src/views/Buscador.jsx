@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useDebounce } from "../hooks/useDebounce.js";
 import { useBuscarPersonajes } from "../hooks/useBuscarPersonajes.js";
-import PersonajeList from "../components/ui/PersonajeList.jsx";
-import Cargando from "../components/ui/Cargando.jsx";
-import MensajeError from "../components/ui/MensajeError.jsx";
+import {PersonajeList} from "../components/ui/PersonajeList.jsx";
+import {Cargando} from "../components/ui/Cargando.jsx";
+import {MensajeError} from "../components/ui/MensajeError.jsx";
 
 export function Buscador() {
   const [busqueda, setBusqueda] = useState("");
@@ -24,7 +24,10 @@ export function Buscador() {
       {loading && <Cargando />}
       {error && <MensajeError mensaje={error} />}
       {!loading && !error && personajes.length === 0 && (
-        <p className="py-10 text-center">No encontramos personajes con "{nombre}".</p>
+        <div className="rounded-lg bg-error-container p-4 text-center text-on-error-container">
+          <span className="material-symbols-outlined">error</span>
+          <p>No encontramos personajes con "{nombre}".</p>
+        </div>
       )}
       {!loading && !error && personajes.length > 0 && (
         <PersonajeList personajes={personajes} />

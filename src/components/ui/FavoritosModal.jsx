@@ -1,4 +1,4 @@
-import Modal from "./Modal.jsx";
+import {Modal} from "./Modal.jsx";
 import { useFavoritosContext } from "../../context/FavoritosContext.jsx";
 
 export function FavoritosModal({ abierto, onCerrar }) {
