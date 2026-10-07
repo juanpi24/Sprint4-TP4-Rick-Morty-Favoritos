@@ -4,7 +4,7 @@ import { useLocalStorage } from "./useLocalStorage.js";
 // porque al cambiar la búsqueda ese personaje ya no viene en los resultados.
 export function useFavoritos() {
   const [favoritos, setFavoritos] = useLocalStorage("favoritos", []);
-
+  
   const esFavorito = (id) => favoritos.some((p) => p.id === id);
 
   const toggleFavorito = (personaje) => {
@@ -24,5 +24,8 @@ export function useFavoritos() {
     );
   };
 
-  return { favoritos, esFavorito, toggleFavorito };
+   /** Vacía el carrito entero (lo usa ConfirmationModal antes de confirmar). */
+  const vaciarFavoritos = () => setFavoritos([]);
+  
+  return { favoritos, esFavorito, toggleFavorito,vaciarFavoritos };
 }

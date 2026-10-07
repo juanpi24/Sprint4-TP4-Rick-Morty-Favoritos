@@ -1,24 +1,29 @@
-export function Modal({ abierto, onCerrar, titulo, children }) {
+import { useEffect } from 'react';
+
+/**
+ * Modal genérico y reutilizable. No sabe nada de carrito ni de
+ * productos — solo sabe mostrar una caja con children adentro, y
+ * cerrarse con Escape.
+ *
+ */
+export function Modal({ abierto, onCerrar, children }) {
+  // Bonus: cerrar con Escape. Mismo patrón que ListPanel del TP2.
+  useEffect(() => {
+    if (!abierto) return;
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') onCerrar();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [abierto, onCerrar]);
+
   if (!abierto) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-on-surface/70 p-4"
-      onClick={onCerrar}
-    >
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label={titulo}
-        className="max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-default border border-outline-variant bg-surface-container p-5 text-on-surface shadow-xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold">{titulo}</h2>
-          <button onClick={onCerrar} aria-label="Cerrar" className="text-2xl leading-none">
-            ×
-          </button>
-        </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-on-surface/50">
+      <div className="bg-surface-container rounded-lg p-6 shadow-xl">
         {children}
       </div>
     </div>

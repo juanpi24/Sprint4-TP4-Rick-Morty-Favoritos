@@ -23,7 +23,7 @@ export function PersonajeCard({ personaje }) {
         <button
           onClick={() => toggleFavorito(personaje)}
           aria-pressed={favorito}
-          className={`mt-2 w-full rounded-lg px-3 py-2 text-sm font-semibold text-on-primary hover:opacity-90 ${
+          className={`mt-2 w-full rounded-lg px-3 py-2 text-sm font-semibold text-on-primary hover:opacity-90 cursor-pointer ${
                favorito ? "bg-tertiary" : "bg-primary"
             }`}>
           {favorito ? "★ En favoritos" : "☆ Agregar a favoritos"}
