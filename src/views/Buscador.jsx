@@ -12,11 +12,23 @@ export function Buscador() {
 
   return (
     <section className="space-y-6">
+      <div>
+        <h1 className="font-syne text-2xl font-bold text-on-surface">
+          Buscar en el Multiverso
+        </h1>
+        <p className="text-on-surface-variant text-sm mt-1">
+          Buscá tus personajes favoritos
+        </p>
+      </div>
+      <label htmlFor="buscador-personajes" className="sr-only">
+          Ingresá el nombre de un personaje (Rick, Morty, Summer...)
+        </label>
       <input
+        id="buscador-personajes"
         type="search"
         value={busqueda}
         onChange={(e) => setBusqueda(e.target.value)}
-        placeholder="Buscar personaje (Rick, Morty, Summer...)"
+        placeholder="Ingresá el nombre de un personaje (Rick, Morty, Summer...)"
         aria-label="Buscar personaje"
         className="w-full rounded-lg border border-outline-variant bg-surface-container p-3 text-on-surface placeholder:text-on-surface-variant"
       />

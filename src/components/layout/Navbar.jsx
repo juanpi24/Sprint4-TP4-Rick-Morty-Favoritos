@@ -15,7 +15,7 @@ export function Navbar({ onAbrirFavoritos }) {
             className="h-9 w-9 object-contain rounded-full"
           />
           <span className="font-syne font-bold text-lg text-on-surface">
-            Rick y Morty<span className="text-primary">Favoritos</span>
+            Rick y Morty <span className="text-primary">Favoritos</span>
           </span>
         </div>
                 
