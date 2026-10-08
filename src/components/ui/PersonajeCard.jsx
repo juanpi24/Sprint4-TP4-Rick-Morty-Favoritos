@@ -1,5 +1,5 @@
 import { useFavoritosContext } from "../../context/FavoritosContext.jsx";
-import { ESPECIE_TRADUCCION } from '../../constants/species.js';
+import { translateStatus,translateSpecies,translateGender } from '../../constants/translations.js';
 
 export function PersonajeCard({ personaje }) {
 
@@ -16,16 +16,31 @@ export function PersonajeCard({ personaje }) {
       />
       <div className="space-y-1 p-4">
         <h3 className="text-lg font-bold">{personaje.name}</h3>
+
+      {personaje.gender && (
         <p className="text-sm text-on-surface-variant">
-         Especie: {ESPECIE_TRADUCCION[personaje.species] || personaje.species}
+            Género: {translateGender(personaje.gender)}
         </p>
+      )}  
+
+      {personaje.species && (
         <p className="text-sm text-on-surface-variant">
-          Estado: {personaje.status === 'Alive' ? '🟢 Vivo' : personaje.status === 'Dead' ? '🔴 Muerto' : '⚪ Desconocido'}
+          Especie: {translateSpecies(personaje.species)}
         </p>
+      )}
+
+      {personaje.status && (
         <p className="text-sm text-on-surface-variant">
-          Origen: {personaje.origin?.name === 'unknown' ? '🌌 Dimensión Desconocida' : personaje.origin?.name || 'No especificado'}
+            Estado: {translateStatus(personaje.status)}
         </p>
-      
+        )}
+
+      {personaje.origin?.name && (
+        <p className="text-sm text-on-surface-variant">
+            Origen: {personaje.origin.name === "unknown"  ? "Desconocido"  : personaje.origin.name}
+        </p>
+      )}
+
         {/* Botón dinámico con operador ternario basado en estado derivado */}
         <button
           type="button"
@@ -40,7 +55,7 @@ export function PersonajeCard({ personaje }) {
           <span className="material-symbols-outlined text-[18px]">
             {favorito ? 'delete' : 'add'}
           </span>
-          <span>{favorito ? 'Quitar de mi lista' : 'Agregar a mi lista'}</span>
+          <span>{favorito ? 'Quitar de favoritos' : 'Agregar a favoritos'}</span>
         </button>
 
       </div>

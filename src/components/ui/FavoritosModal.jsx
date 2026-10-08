@@ -64,7 +64,7 @@ export  function FavoritosModal({ abierto, onCerrar }) {
                 onClick={abrirConfirmacion}
                 className="mt-5 w-full rounded-lg border border-error px-3 py-2 text-sm font-semibold text-error hover:bg-error-container hover:text-on-error-container cursor-pointer"
               >
-                Vaciar lista
+                Vaciar favoritos
               </button>
             </div>
             </>
@@ -79,7 +79,7 @@ export  function FavoritosModal({ abierto, onCerrar }) {
         onCerrar={cerrarConfirmacion}
         onConfirmar={handleConfirmarVaciado}
         titulo="¿Vaciar lista de favoritos?"
-        mensaje="Se van a quitar todos tus personajes favoritos. Esta acción no se puede deshacer."
+        mensaje="Se eliminarán todos los personajes guardados de tu lista. Esta acción no se puede deshacer."
       />
     </>
   );
