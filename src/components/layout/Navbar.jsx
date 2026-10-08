@@ -36,9 +36,9 @@ export function Navbar({ onAbrirFavoritos }) {
             aria-label="Abrir favoritos"
             className="relative flex items-center gap-2 bg-surface-container-high px-3.5 py-1.5 rounded-full border border-outline-variant/40 hover:bg-surface-container-highest transition-colors duration-150 active:scale-95 cursor-pointer"
           >
-
-            <span className="material-symbols-outlined text-on-surface text-lg">
-              favorite
+            <span className="material-symbols-outlined text-primary text-[20px]">favorite</span>
+            <span className="font-label-md text-sm text-on-surface font-medium hidden sm:inline">
+              Mis Favoritos
             </span>
 
              {favoritos.length > 0 && (
