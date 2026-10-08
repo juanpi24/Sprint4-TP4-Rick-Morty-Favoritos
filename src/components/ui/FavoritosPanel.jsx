@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useToggle } from '../../hooks/useToggle.js';
 import { useFavoritosContext } from '../../context/FavoritosContext.jsx';    
 import { ConfirmationModal } from '../ConfirmationModal';
+import { translateSpecies, translateStatus } from '../../constants/translations.js';
 
 /**
  * Componente FavoritosPanel: Panel lateral para mostrar la lista de favoritos.
@@ -116,7 +117,7 @@ export function FavoritosPanel({abierto, onCerrar,}) {
                         {personaje.name}
                       </span>
                       <span className="text-[11px] text-on-surface-variant truncate">
-                        {personaje.species} · {personaje.status}
+                        {translateSpecies(personaje.species)} · {translateStatus(personaje.status)}
                       </span>
                     </div>
                   </div>
