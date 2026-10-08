@@ -1,5 +1,5 @@
 import { useFavoritosContext } from "../../context/FavoritosContext.jsx";
-import { translateStatus,translateSpecies,translateGender, translateOrigin } from '../../constants/translations.js';
+import { translateStatus, translateSpecies, translateGender, translateOrigin } from '../../constants/translations.js';
 
 export function PersonajeCard({ personaje }) {
 
