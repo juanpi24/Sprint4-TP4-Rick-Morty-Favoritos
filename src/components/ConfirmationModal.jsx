@@ -11,10 +11,13 @@ export function ConfirmationModal({ abierto, onCerrar, onConfirmar, titulo, mens
   return (
     <Modal abierto={abierto} onCerrar={onCerrar}>
       <div className="max-w-sm w-full">
-        <h3 className="text-lg font-bold text-on-surface mb-2">{titulo}</h3>
-        <p className="text-sm text-on-surface-variant mb-6">{mensaje}</p>
+        <div className="mb-4 text-4xl text-center">⚠️</div>
+        <h3 className="text-lg font-bold text-on-surface mb-2 text-center">{titulo}</h3>
+        <p className="text-sm text-on-surface-variant mb-6 text-center">
+          {mensaje}
+        </p>
 
-        <div className="flex justify-end gap-3">
+        <div className="flex justify-center gap-3">
           <button
             onClick={onCerrar}
             className="px-4 py-2 text-sm font-medium text-on-surface bg-surface-container-high rounded-md hover:bg-surface-container-highest cursor-pointer transition-colors duration-150"
