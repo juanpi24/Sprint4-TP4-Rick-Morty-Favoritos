@@ -1,4 +1,4 @@
-import { Modal } from './ui/Modal.jsx';
+import { Modal } from './Modal.jsx';
 
 /**
  * Adaptado del ConfirmationModal.jsx del TP2. La diferencia con esta

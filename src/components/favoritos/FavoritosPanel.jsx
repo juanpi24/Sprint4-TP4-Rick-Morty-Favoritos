@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useToggle } from '../../hooks/useToggle.js';
 import { useFavoritosContext } from '../../context/FavoritosContext.jsx';    
-import { ConfirmationModal } from '../ConfirmationModal';
+import { ConfirmationModal } from '../ui/ConfirmationModal';
 import { translateSpecies, translateStatus } from '../../constants/translations.js';
 
 /**

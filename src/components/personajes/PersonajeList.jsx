@@ -1,4 +1,4 @@
-import {PersonajeCard} from "./PersonajeCard.jsx";
+import {PersonajeCard} from "../personajes/PersonajeCard.jsx";
 
 export function PersonajeList({ personajes }) {
   return (

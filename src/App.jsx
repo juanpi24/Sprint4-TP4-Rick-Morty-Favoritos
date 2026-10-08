@@ -1,7 +1,7 @@
 import {Navbar} from './components/layout/Navbar.jsx';
 import {Footer} from './components/layout/Footer.jsx';
-//import { FavoritosModal} from './components/ui/FavoritosModal.jsx';
-import { FavoritosPanel } from './components/ui/FavoritosPanel.jsx';
+//import { FavoritosModal} from './components/favoritos/FavoritosModal.jsx';
+import { FavoritosPanel } from './components/favoritos/FavoritosPanel.jsx';
 //import { Buscador } from './views/Buscador.jsx';
 import { BuscadorBar } from './views/BuscadorBar.jsx';
 import { useToggle } from './hooks/useToggle.js';

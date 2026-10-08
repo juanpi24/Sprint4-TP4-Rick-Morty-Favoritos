@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { useDebounce } from "../hooks/useDebounce.js";
 import { useBuscarPersonajes } from "../hooks/useBuscarPersonajes.js";
-import { PersonajeList } from "../components/ui/PersonajeList.jsx";
+import { PersonajeList } from "../components/personajes/PersonajeList.jsx";
 import { Cargando } from "../components/ui/Cargando.jsx";
 import { MensajeError } from "../components/ui/MensajeError.jsx";
 import { translateGender } from "../constants/translations.js"; 
