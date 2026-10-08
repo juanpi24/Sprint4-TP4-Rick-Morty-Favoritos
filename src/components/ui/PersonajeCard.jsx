@@ -1,5 +1,5 @@
 import { useFavoritosContext } from "../../context/FavoritosContext.jsx";
-import { translateStatus,translateSpecies,translateGender } from '../../constants/translations.js';
+import { translateStatus,translateSpecies,translateGender, translateOrigin } from '../../constants/translations.js';
 
 export function PersonajeCard({ personaje }) {
 
@@ -37,7 +37,7 @@ export function PersonajeCard({ personaje }) {
 
       {personaje.origin?.name && (
         <p className="text-sm text-on-surface-variant">
-            Origen: {personaje.origin.name === "unknown"  ? "Desconocido"  : personaje.origin.name}
+            Origen: {translateOrigin(personaje.origin.name)}
         </p>
       )}
 
