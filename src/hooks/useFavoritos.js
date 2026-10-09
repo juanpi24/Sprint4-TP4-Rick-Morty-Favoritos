@@ -1,16 +1,22 @@
-import { useLocalStorage } from "./useLocalStorage.js";
 
-// Lógica de favoritos. Se guarda un resumen de cada personaje (no solo el id)
-// porque al cambiar la búsqueda ese personaje ya no viene en los resultados.
+import { useLocalStorage } from "./useLocalStorage.js";
+import { toast } from "react-toastify";
+
+// Lógica de favoritos con persistencia y notificaciones.
 export function useFavoritos() {
   const [favoritos, setFavoritos] = useLocalStorage("favoritos", []);
-  
-  const esFavorito = (id) => favoritos.some((p) => p.id === id);
+
+  const esFavorito = (id) =>
+    favoritos.some((personaje) => personaje.id === id);
 
   const toggleFavorito = (personaje) => {
+    const yaEsFavorito = favoritos.some(
+      (actual) => actual.id === personaje.id
+    );
+
     setFavoritos((actuales) =>
-      actuales.some((p) => p.id === personaje.id)
-        ? actuales.filter((p) => p.id !== personaje.id)
+      yaEsFavorito
+        ? actuales.filter((actual) => actual.id !== personaje.id)
         : [
             ...actuales,
             {
@@ -22,10 +28,26 @@ export function useFavoritos() {
             },
           ]
     );
+
+    if (yaEsFavorito) {
+      toast.info(`${personaje.name} se quitó de favoritos 💔`);
+    } else {
+      toast.success(`${personaje.name} se agregó a favoritos ⭐`);
+    }
   };
 
-   /** Vacía la lista de favoritos (se llama desde el ConfirmationModal al confirmar). */
-  const vaciarFavoritos = () => setFavoritos([]);
-  
-  return { favoritos, esFavorito, toggleFavorito, vaciarFavoritos };
+  // Vacía la lista completa de favoritos.
+  const vaciarFavoritos = () => {
+    if (favoritos.length === 0) return;
+
+    setFavoritos([]);
+    toast.success("Se vaciaron todos los favoritos 🗑️");
+  };
+
+  return {
+    favoritos,
+    esFavorito,
+    toggleFavorito,
+    vaciarFavoritos,
+  };
 }
