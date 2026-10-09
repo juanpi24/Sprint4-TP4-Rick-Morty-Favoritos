@@ -1,51 +1,31 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useDebounce } from "../hooks/useDebounce.js";
 import { useBuscarPersonajes } from "../hooks/useBuscarPersonajes.js";
 import { PersonajeList } from "../components/personajes/PersonajeList.jsx";
 import { Cargando } from "../components/ui/Cargando.jsx";
 import { MensajeError } from "../components/ui/MensajeError.jsx";
-import { translateGender } from "../constants/translations.js"; 
+
+// Opciones fijas del filtro. "valor" es lo que espera la API en ?gender=...
+// (no se derivan de los resultados: así siempre se ven todas, sin importar la búsqueda)
+const GENEROS = [
+  { valor: "", etiqueta: "Todos" },
+  { valor: "female", etiqueta: "Femenino" },
+  { valor: "male", etiqueta: "Masculino" },
+  { valor: "genderless", etiqueta: "Sin género" },
+  { valor: "unknown", etiqueta: "Desconocido" },
+];
 
 export function BuscadorBar() {
   const [busqueda, setBusqueda] = useState("");
-  const [generoSeleccionado, setGeneroSeleccionado] = useState("Todos");
-  
-  const nombreDebounced = useDebounce(busqueda);
-  const { personajes, loading, error } = useBuscarPersonajes(nombreDebounced);
+  const [genero, setGenero] = useState("");
 
-  // Derivamos los géneros disponibles directamente de los personajes que devolvió la API
-  const listaGeneros = useMemo(() => {
-    if (!personajes) return ["Todos"];
-    const generosUnicos = [...new Set(personajes.map((p) => p.gender).filter(Boolean))];
-    return ["Todos", ...generosUnicos];
-  }, [personajes]);
-
-  // Filtramos localmente aplicando la búsqueda inteligente combinada
-  const personajesFiltrados = useMemo(() => {
-    if (!personajes) return [];
-    
-    return personajes.filter((personaje) => {
-      const query = busqueda.toLowerCase();
-      const generoTraducido = translateGender(personaje.gender).toLowerCase();
-      const generoOriginal = (personaje.gender || "").toLowerCase();
-
-      // Condición de búsqueda por texto: coincide con nombre OR género (en inglés o español)
-      const coincideBusqueda =
-        personaje.name.toLowerCase().includes(query) ||
-        generoOriginal.includes(query) ||
-        generoTraducido.includes(query);
-
-      // Condición de filtro por botón de Género (Chips)
-      const coincideGeneroChip =
-        generoSeleccionado === "Todos" || personaje.gender === generoSeleccionado;
-
-      return coincideBusqueda && coincideGeneroChip;
-    });
-  }, [busqueda, personajes, generoSeleccionado]);
+  // Nombre y género viajan a la API: la búsqueda no filtra un lote ya traído
+  const nombre = useDebounce(busqueda);
+  const { personajes, loading, error } = useBuscarPersonajes(nombre, genero);
 
   const onResetSearch = () => {
     setBusqueda("");
-    setGeneroSeleccionado("Todos");
+    setGenero("");
   };
 
   return (
@@ -62,7 +42,7 @@ export function BuscadorBar() {
       {/* Campo de Búsqueda por texto */}
       <div className="relative flex items-center w-full">
         <label htmlFor="buscador-personajes" className="sr-only">
-          Buscar por nombre o género (Rick, Femenino, Masculino...)
+          Buscar por nombre de personaje (Rick, Morty, Summer...)
         </label>
         <span className="material-symbols-outlined absolute left-4 text-on-surface-variant/60 pointer-events-none">
           search
@@ -72,41 +52,43 @@ export function BuscadorBar() {
           type="search"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
-          placeholder="Buscar por nombre o género (Rick, Femenino, Masculino...)"
+          placeholder="Buscar por nombre (Rick, Morty, Summer...)"
           aria-label="Buscar personaje"
           className="w-full bg-surface-container pl-12 pr-4 py-3.5 rounded-full border border-outline-variant text-on-surface placeholder:text-on-surface-variant/50 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-inner transition-colors duration-150"
         />
       </div>
 
-      {/* Chips de Filtro por Género (Traducidos dinámicamente) */}
-      {!loading && !error && personajes.length > 0 && (
-        <div className="w-full flex gap-2 overflow-x-auto py-1 scrollbar-none">
-          {listaGeneros.map((gen) => {
-            const isActive = generoSeleccionado === gen;
-            return (
-              <button
-                key={gen}
-                type="button"
-                onClick={() => setGeneroSeleccionado(gen)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer shrink-0 ${
-                  isActive
-                    ? "bg-primary/10 border border-primary text-primary"
-                    : "bg-surface-container border border-outline-variant/40 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high"
-                }`}
-              >
-                {/* 2. Mostramos "Todos" tal cual, o el género traducido */}
-                {gen === "Todos" ? "Todos" : translateGender(gen)}
-              </button>
-            );
-          })}
-        </div>
-      )}
+      {/* Chips de filtro por género: se envían a la API */}
+      <div
+        role="group"
+        aria-label="Filtrar por género"
+        className="w-full flex gap-2 overflow-x-auto py-1 scrollbar-none"
+      >
+        {GENEROS.map(({ valor, etiqueta }) => {
+          const isActive = genero === valor;
+          return (
+            <button
+              key={valor || "todos"}
+              type="button"
+              aria-pressed={isActive}
+              onClick={() => setGenero(valor)}
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer shrink-0 ${
+                isActive
+                  ? "bg-primary/10 border border-primary text-primary"
+                  : "bg-surface-container border border-outline-variant/40 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high"
+              }`}
+            >
+              {etiqueta}
+            </button>
+          );
+        })}
+      </div>
 
       {loading && <Cargando />}
       {error && <MensajeError mensaje={error} />}
 
       {/* Mensaje de Lista Vacía */}
-      {!loading && !error && personajesFiltrados.length === 0 && (
+      {!loading && !error && personajes.length === 0 && (
         <section className="flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/40 rounded-2xl p-8 bg-surface-container/40 text-center my-4">
           <div className="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center text-primary mb-3">
             👽
@@ -128,9 +110,9 @@ export function BuscadorBar() {
         </section>
       )}
 
-      {/* Renderizado de la lista filtrada */}
-      {!loading && !error && personajesFiltrados.length > 0 && (
-        <PersonajeList personajes={personajesFiltrados} />
+      {/* Renderizado de la lista */}
+      {!loading && !error && personajes.length > 0 && (
+        <PersonajeList personajes={personajes} />
       )}
     </section>
   );

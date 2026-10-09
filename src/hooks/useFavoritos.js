@@ -24,8 +24,8 @@ export function useFavoritos() {
     );
   };
 
-   /** Vacía el carrito entero (lo usa ConfirmationModal antes de confirmar). */
+   /** Vacía la lista de favoritos (se llama desde el ConfirmationModal al confirmar). */
   const vaciarFavoritos = () => setFavoritos([]);
   
-  return { favoritos, esFavorito, toggleFavorito,vaciarFavoritos };
+  return { favoritos, esFavorito, toggleFavorito, vaciarFavoritos };
 }

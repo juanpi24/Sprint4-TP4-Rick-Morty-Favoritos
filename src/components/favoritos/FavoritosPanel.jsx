@@ -1,15 +1,15 @@
 import { useEffect } from 'react';
 import { useToggle } from '../../hooks/useToggle.js';
 import { useFavoritosContext } from '../../context/FavoritosContext.jsx';    
-import { ConfirmationModal } from '../ui/ConfirmationModal';
+import { ConfirmationModal } from '../ui/ConfirmationModal.jsx';
 import { translateSpecies, translateStatus } from '../../constants/translations.js';
 
 /**
  * Componente FavoritosPanel: Panel lateral para mostrar la lista de favoritos.
  * Este componente se renderiza como un "drawer" lateral que se abre desde el lado derecho de la pantalla.
  * Permite al usuario ver sus personajes favoritos, quitar personajes individuales o vaciar toda la lista.
- * @param {boolean} isOpen - Indica si el panel está abierto.
- * @param {function} onClose - Función para cerrar el panel.
+ * @param {boolean} abierto - Indica si el panel está abierto.
+ * @param {function} onCerrar - Función para cerrar el panel.
  */
 export function FavoritosPanel({abierto, onCerrar,}) {
   // Consumimos el contexto de favoritos tal como en FavoritosModal
@@ -18,9 +18,11 @@ export function FavoritosPanel({abierto, onCerrar,}) {
   /* Usamos useToggle local para controlar el modal de confirmación*/
    const [confirmando, , abrirConfirmacion, cerrarConfirmacion] = useToggle(false);
   
-  // Bonus: Cierre del modal presionando la tecla Escape
+  // Bonus: Cierre del panel presionando la tecla Escape.
+  // Mientras se confirma el vaciado no escuchamos Escape acá: lo maneja el ConfirmationModal,
+  // así Escape cierra solo la confirmación y no las dos cosas a la vez.
   useEffect(() => {
-    if (!abierto) return;
+    if (!abierto || confirmando) return;
 
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
@@ -30,13 +32,13 @@ export function FavoritosPanel({abierto, onCerrar,}) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [abierto, onCerrar]);
+  }, [abierto, confirmando, onCerrar]);
 
   // 1. Creamos la función para manejar la confirmación
   const handleConfirmarVaciado = () => {
-    vaciarFavoritos();     // Vacía la lista
-    cerrarConfirmacion();  // Cierra el modal de confirmación
-    onCerrar();            // Cierra el modal de favoritos principal
+    vaciarFavoritos(); // Vacía la lista
+    onCerrar();        // Cierra el panel de favoritos
+    // La confirmación la cierra el propio ConfirmationModal después de llamar a esta función
   };
 
   /* Si el panel no está abierto, no se renderiza nada. */
