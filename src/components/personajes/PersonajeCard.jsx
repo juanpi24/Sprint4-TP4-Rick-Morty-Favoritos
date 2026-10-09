@@ -16,29 +16,81 @@ export function PersonajeCard({ personaje }) {
       />
       <div className="space-y-1 p-4">
         <h3 className="text-lg font-bold">{personaje.name}</h3>
-
+      
+      {/* Género */}
       {personaje.gender && (
-        <p className="text-sm text-on-surface-variant">
-            Género: {translateGender(personaje.gender)}
-        </p>
-      )}  
-
-      {personaje.species && (
-        <p className="text-sm text-on-surface-variant">
-          Especie: {translateSpecies(personaje.species)}
-        </p>
+        <div className="flex items-center gap-3 text-on-surface-variant">
+          <span className="material-symbols-outlined text-[24px] select-none">
+            male
+          </span>
+          <p className="text-sm font-medium">
+            <span className="opacity-70 font-normal">Género:</span>{' '}
+            {translateGender(personaje.gender)}
+          </p>
+        </div>
       )}
 
-      {personaje.status && (
-        <p className="text-sm text-on-surface-variant">
-            Estado: {translateStatus(personaje.status)}
-        </p>
-        )}
+      {/* Especie */}
+      {personaje.species && (
+        <>
+          <div className="flex items-center gap-3 text-on-surface-variant">
+            <span className="material-symbols-outlined text-[24px] select-none">
+              person
+            </span>
+            <p className="text-sm font-medium">
+              <span className="opacity-70 font-normal">Especie:</span>{' '}
+              {translateSpecies(personaje.species)}
+            </p>
+          </div>
+        </>
+      )}
 
+      {/* Estado */}
+      {personaje.status && (
+        <>
+          <div className="flex items-center gap-3 text-on-surface-variant">
+            <span
+              className={`material-symbols-outlined text-[24px] ${
+                personaje.status === 'Alive'
+                  ? 'text-primary'
+                  : personaje.status === 'Dead'
+                    ? 'text-error'
+                    : 'text-on-surface-variant'
+              }`}
+            >
+              {personaje.status === 'Alive' ? 'favorite' : personaje.status === 'Dead' ? 'heart_broken' : 'help'}
+            </span>
+            <p className="text-sm font-medium">
+              <span className="opacity-70 font-normal">Estado:</span>
+              <span
+                className={`ml-1 px-2 py-0.5 rounded-full text-xs font-semibold ${
+                  personaje.status === 'Alive'
+                    ? 'text-primary bg-primary/20'
+                    : personaje.status === 'Dead'
+                      ? 'text-error bg-error/20'
+                      : 'text-on-surface-variant bg-on-surface-variant/20'
+                }`}
+              >
+                {translateStatus(personaje.status)}
+              </span>
+            </p>
+          </div>
+        </>
+      )}
+
+      {/* Origen */}
       {personaje.origin?.name && (
-        <p className="text-sm text-on-surface-variant">
-            Origen: {translateOrigin(personaje.origin.name)}
-        </p>
+        <>
+          <div className="flex items-center gap-3 text-on-surface-variant">
+            <span className="material-symbols-outlined text-[24px] select-none">
+              public
+            </span>
+            <p className="text-sm font-medium">
+              <span className="opacity-70 font-normal">Origen:</span>{' '}
+              {translateOrigin(personaje.origin.name)}
+            </p>
+          </div>
+        </>
       )}
 
         {/* Botón dinámico con operador ternario basado en estado derivado */}
