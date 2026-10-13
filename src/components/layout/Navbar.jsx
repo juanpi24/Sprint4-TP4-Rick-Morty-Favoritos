@@ -7,7 +7,7 @@ export function Navbar({ onAbrirFavoritos }) {
 
   return (
     <header className="sticky top-0 z-40 bg-surface-container/90 backdrop-blur border-b border-outline-variant/30">
-      <nav className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
+      <nav className="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-3">
           <img
             src="/logo.png"

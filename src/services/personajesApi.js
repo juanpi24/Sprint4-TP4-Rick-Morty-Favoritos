@@ -1,7 +1,8 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
-// GET /character/?name=...&gender=...  (sin filtros devuelve la primera página de personajes)
-export async function buscarPersonajes({ nombre, gender }, signal) {
+// GET /character/?name=...&gender=...&page=...  (sin filtros devuelve todos los personajes, 20 por página)
+// Devuelve { personajes, paginas }: la lista de la página pedida y el total de páginas.
+export async function buscarPersonajes({ nombre, gender, pagina = 1 }, signal) {
   // Validamos preventivamente si la variable de entorno está vacía
   if (!API_URL) {
     throw new Error("Error de configuración: la URL de la API (VITE_API_URL) no está definida.");
@@ -10,6 +11,7 @@ export async function buscarPersonajes({ nombre, gender }, signal) {
   const params = new URLSearchParams();
   if (nombre.trim()) params.set("name", nombre.trim());
   if (gender) params.set("gender", gender);
+  params.set("page", pagina);
 
   // El try/catch envuelve SOLO el fetch: así los errores HTTP de más abajo
   // conservan su propio mensaje y no se pisan con el de "sin conexión".
@@ -26,7 +28,7 @@ export async function buscarPersonajes({ nombre, gender }, signal) {
   }
 
   // 1. La API funciona pero no encontró resultados (comportamiento esperado de esta API)
-  if (respuesta.status === 404) return [];
+  if (respuesta.status === 404) return { personajes: [], paginas: 0 };
 
   // 2. El servidor respondió con un error HTTP (ej: 500, 502)
   if (!respuesta.ok) {
@@ -36,7 +38,7 @@ export async function buscarPersonajes({ nombre, gender }, signal) {
   // 3. Respuesta con formato inesperado
   try {
     const data = await respuesta.json();
-    return data.results;
+    return { personajes: data.results, paginas: data.info.pages };
   } catch (err) {
     throw new Error("La respuesta del servidor no tiene un formato válido.", { cause: err });
   }
