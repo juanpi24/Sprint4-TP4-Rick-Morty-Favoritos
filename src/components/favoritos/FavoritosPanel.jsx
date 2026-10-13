@@ -67,7 +67,7 @@ export function FavoritosPanel({abierto, onCerrar,}) {
           {/* Header */}
           <div className="flex items-center justify-between pb-4 border-b border-outline-variant/30">
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary text-xl">
+              <span className="material-symbols-outlined text-primary text-xl aria-hidden=true">
                 bookmark
               </span>
               <h2 className="text-lg font-bold text-on-surface">
@@ -82,7 +82,7 @@ export function FavoritosPanel({abierto, onCerrar,}) {
               aria-label="Cerrar panel"
               className="text-on-surface-variant hover:text-on-surface p-1 rounded-lg transition-colors cursor-pointer"
             >
-              <span className="material-symbols-outlined text-2xl">close</span>
+              <span className="material-symbols-outlined text-2xl aria-hidden=true">close</span>
             </button>
           </div>
 
@@ -103,7 +103,7 @@ export function FavoritosPanel({abierto, onCerrar,}) {
           <div className="flex flex-col gap-3 mt-2 overflow-y-auto flex-1 pr-1">
             {favoritos.length === 0 ? (
               <div className="text-center py-8 text-on-surface-variant flex flex-col items-center justify-center h-full">
-                <span className="material-symbols-outlined text-4xl mb-2 text-on-surface-variant/50">
+                <span className="material-symbols-outlined text-4xl mb-2 text-on-surface-variant/50 aria-hidden=true">
                   playlist_remove
                 </span>
                 <p className="text-sm max-w-50">
@@ -121,6 +121,7 @@ export function FavoritosPanel({abierto, onCerrar,}) {
                       src={personaje.image}
                       alt={personaje.name}
                       className="w-11 h-11 rounded-lg object-cover shrink-0"
+                      loading="lazy" // Optimización de carga de imágenes en listas largas
                     />
                     <div className="flex flex-col min-w-0">
                       <span className="text-xs text-on-surface font-semibold truncate">
@@ -155,7 +156,7 @@ export function FavoritosPanel({abierto, onCerrar,}) {
             disabled={favoritos.length === 0}
             className="w-full py-2.5 rounded-xl bg-error-container text-on-error-container hover:bg-error-container/80 font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            <span className="material-symbols-outlined text-sm">delete_sweep</span>
+            <span className="material-symbols-outlined text-sm aria-hidden=true">delete_sweep</span>
             Vaciar favoritos
           </button>
         </div>

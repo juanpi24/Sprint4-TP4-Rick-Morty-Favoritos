@@ -40,7 +40,7 @@ export function BuscadorBar() {
         <label htmlFor="buscador-personajes" className="sr-only">
           Buscar por nombre de personaje (Rick, Morty, Summer...)
         </label>
-        <span className="material-symbols-outlined absolute left-4 text-on-surface-variant/60 pointer-events-none">
+        <span className="material-symbols-outlined absolute left-4 text-on-surface-variant/60 pointer-events-none aria-hidden=true">
           search
         </span>
         <input

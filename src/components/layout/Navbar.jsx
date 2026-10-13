@@ -26,7 +26,7 @@ export function Navbar({ onAbrirFavoritos }) {
             aria-label={isDark ? 'Activar modo claro' : 'Activar modo oscuro'}
             className="flex items-center justify-center w-9 h-9 rounded-full bg-surface-container-high border border-outline-variant/40 hover:bg-surface-container-highest transition-colors cursor-pointer"
           >
-            <span className="material-symbols-outlined text-on-surface text-lg">
+            <span className="material-symbols-outlined text-on-surface text-lg aria-hidden=true">
               {isDark ? 'light_mode' : 'dark_mode'}
             </span>
         </button>
@@ -36,7 +36,7 @@ export function Navbar({ onAbrirFavoritos }) {
             aria-label="Abrir favoritos"
             className="relative flex items-center gap-2 bg-surface-container-high px-3.5 py-1.5 rounded-full border border-outline-variant/40 hover:bg-surface-container-highest transition-colors duration-150 active:scale-95 cursor-pointer"
           >
-            <span className="material-symbols-outlined text-primary text-[20px]">favorite</span>
+            <span className="material-symbols-outlined text-primary text-[20px] aria-hidden=true">favorite</span>
             <span className="font-label-md text-sm text-on-surface font-medium hidden sm:inline">
               Mis Favoritos
             </span>
