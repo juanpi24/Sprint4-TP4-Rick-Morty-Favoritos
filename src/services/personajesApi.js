@@ -38,7 +38,10 @@ export async function buscarPersonajes({ nombre, gender, pagina = 1 }, signal) {
   // 3. Respuesta con formato inesperado
   try {
     const data = await respuesta.json();
-    return { personajes: data.results, paginas: data.info.pages };
+    return { 
+      personajes: data.results, 
+      paginas: data.info.pages 
+    };
   } catch (err) {
     throw new Error("La respuesta del servidor no tiene un formato válido.", { cause: err });
   }

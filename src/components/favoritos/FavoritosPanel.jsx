@@ -24,6 +24,9 @@ export function FavoritosPanel({abierto, onCerrar,}) {
   useEffect(() => {
     if (!abierto || confirmando) return;
 
+  // Bloquea el scroll de la página de fondo al abrirse
+    document.body.style.overflow = 'hidden';
+
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         onCerrar();
@@ -31,7 +34,12 @@ export function FavoritosPanel({abierto, onCerrar,}) {
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    // Limpieza: restablece el scroll y remueve el listener
+    return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+    }
+      
   }, [abierto, confirmando, onCerrar]);
 
   // 1. Creamos la función para manejar la confirmación
