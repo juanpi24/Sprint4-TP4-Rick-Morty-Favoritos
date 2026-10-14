@@ -55,7 +55,6 @@ Este proyecto corresponde al **Trabajo Práctico Sprint 4** y representa la evol
 - Mantener una arquitectura organizada y escalable.
 
 ---
-
 ## 📋 Funcionalidades
 
 ### 🔍 Búsqueda de personajes
@@ -64,6 +63,15 @@ Este proyecto corresponde al **Trabajo Práctico Sprint 4** y representa la evol
 - Debounce de 400 ms para no disparar una petición por cada tecla.
 - Cancelación automática de la petición anterior al cambiar la búsqueda.
 - Estado "sin resultados" con botón para volver a ver todos los personajes.
+
+### 📄 Paginación
+
+- Botones **Anterior** y **Siguiente** con indicador "Página X de Y".
+- Cada página se pide a la API (`?page=...`): se trae solo la porción que se muestra (20 personajes).
+- Los botones se deshabilitan en la primera y en la última página.
+- Al cambiar de página, la vista vuelve al inicio.
+- Si cambia el nombre o el género, la paginación vuelve a la página 1.
+- Con una sola página de resultados, los controles no se muestran.
 
 ### 🧬 Filtro por género
 
@@ -116,8 +124,8 @@ La aplicación fue estructurada separando responsabilidades por dominio:
 - **components/** contiene componentes reutilizables.
 - **favoritos/** agrupa el panel lateral de favoritos.
 - **layout/** agrupa elementos permanentes de la interfaz.
-- **personajes/** contiene la tarjeta y la lista de personajes.
-- **ui/** contiene componentes genéricos: modales y estados de carga y error.
+- **personajes/** contiene la tarjeta, la lista y los resultados (carga, error, vacío, lista y paginación).
+- **ui/** contiene componentes genéricos: modales, paginación y estados de carga y error.
 - **constants/** almacena los diccionarios de traducción.
 - **context/** centraliza estados globales.
 - **hooks/** encapsula lógica reutilizable.
@@ -143,12 +151,13 @@ La aplicación fue estructurada separando responsabilidades por dominio:
 | --------- | --------------------------------------- | ----------------------------- |
 | `name`    | Texto libre (coincidencia parcial)      | Caja de búsqueda              |
 | `gender`  | `female`, `male`, `genderless`, `unknown` | Botones de filtro por género |
+| `page`    | Número de página (desde 1)              | Botones de paginación         |
 
-Ejemplo de consulta: `https://rickandmortyapi.com/api/character/?name=rick&gender=male`
+Ejemplo de consulta: `https://rickandmortyapi.com/api/character/?name=rick&gender=male&page=2`
 
 ### Datos que se utilizan de cada personaje
 
-`id`, `name`, `image`, `gender`, `species`, `status` y `origin.name`. Cada consulta devuelve hasta 20 personajes.
+`id`, `name`, `image`, `gender`, `species`, `status` y `origin.name`. Cada consulta devuelve hasta 20 personajes por página, y `info.pages` indica el total de páginas.
 
 ## Variables de entorno
 
@@ -164,12 +173,13 @@ El repositorio incluye `.env` y `.env.example` con ese valor.
 
 1. El usuario escribe en el input (`busqueda`) o elige un género (`genero`): ambos son estado local de `BuscadorBar`.
 2. `useDebounce(busqueda)` espera a que deje de escribir y devuelve `nombre`.
-3. `useBuscarPersonajes(nombre, genero)` ejecuta un `useEffect` con esas dos dependencias.
-4. El efecto crea un `AbortController`, activa `loading` y llama a `buscarPersonajes()` del servicio.
-5. El servicio arma la URL con `URLSearchParams`, hace el `fetch` y devuelve la lista de personajes.
-6. El hook guarda `personajes` y expone `{ personajes, loading, error }`.
-7. `BuscadorBar` renderiza según el estado: carga, error, lista vacía o lista de tarjetas.
-8. Cada tarjeta consulta `esFavorito(id)` en `FavoritosContext`.
+3. `BuscadorBar` monta `ResultadosPersonajes` con una `key` armada con `nombre` y `genero`: cada búsqueda nueva crea una instancia nueva y la página vuelve a 1.
+4. `ResultadosPersonajes` guarda la página actual (`pagina`) y llama a `useBuscarPersonajes(nombre, genero, pagina)`.
+5. El hook ejecuta un `useEffect` con esas tres dependencias: crea un `AbortController`, activa `loading` y llama a `buscarPersonajes()` del servicio.
+6. El servicio arma la URL con `URLSearchParams`, hace el `fetch` y devuelve `{ personajes, paginas }`.
+7. El hook guarda los datos y expone `{ personajes, paginas, loading, error }`.
+8. `ResultadosPersonajes` renderiza según el estado (carga, error, lista vacía o lista de tarjetas con paginación).
+9. Cada tarjeta consulta `esFavorito(id)` en `FavoritosContext`.
 
 ## Manejo de errores
 
@@ -244,19 +254,19 @@ Hook genérico encargado de sincronizar estado con LocalStorage.
 
 ---
 
-## useBuscarPersonajes(nombre, gender)
+## useBuscarPersonajes(nombre, gender, pagina)
 
 Hook de dominio que encapsula el consumo de la API.
 
 ### Devuelve
 
 ```js
-{ personajes, loading, error }
+{ personajes, paginas, loading, error }
 ```
 
 ### Responsabilidades
 
-- Disparar la petición cada vez que cambia el nombre o el género.
+- Disparar la petición cada vez que cambia el nombre, el género o la página.
 - Cancelar la petición anterior con `AbortController`.
 - Manejar los estados de carga y error.
 - Evitar que una respuesta vieja pise a una más nueva.
@@ -335,6 +345,10 @@ Configuración visual aplicable a toda la aplicación.
 
 Permanecen en `BuscadorBar.jsx` porque únicamente esa vista necesita acceder a dicha información.
 
+### Página actual
+
+Vive en `ResultadosPersonajes.jsx`, el único componente que la usa. Se reinicia sola porque ese componente se monta con una `key` que cambia con la búsqueda.
+
 ### Apertura del panel de favoritos
 
 Permanece como estado de layout en `App.jsx`, porque lo comparten el Navbar (que lo abre) y el panel (que lo muestra).
@@ -353,6 +367,7 @@ Los administra `useBuscarPersonajes`: son datos que dependen de la búsqueda y n
 
 - **`fetch` en vez de `axios`:** se usó `fetch` porque ya viene integrado en el navegador (no hay que instalar ni sumar una dependencia) y se consideró suficiente para este proyecto, que solo hace peticiones GET simples. La contrapartida es que `fetch` no rechaza ante errores HTTP (un 500 resuelve igual la promesa), así que hay que revisar `respuesta.ok` a mano, y eso se hace en `personajesApi.js`. `axios` lo resolvería solo, pero para este alcance no justifica una dependencia más.
 - **Servicio + hook + vista:** `personajesApi.js` arma la URL y traduce los errores a mensajes claros; `useBuscarPersonajes` maneja el estado y el ciclo de vida; los componentes solo renderizan. Si cambia la API, solo se toca el servicio.
+- **Paginación pedida a la API y reinicio con `key`:** cada página se solicita con `?page=`, así solo se descarga lo que se muestra. `ResultadosPersonajes` guarda `pagina` y `BuscadorBar` lo monta con `key={nombre|genero}`: cuando cambia la búsqueda, React crea una instancia nueva y la página vuelve a 1 sin código extra ni efectos de sincronización. `pagina` está en el array de dependencias del efecto.
 - **Filtro por género enviado a la API:** no se filtra sobre los resultados ya traídos. Así el filtro alcanza a todos los personajes de la API y no solo a los 20 de la página actual.
 - **`AbortController`:** al cambiar la búsqueda se cancela la petición anterior. El `finally` del hook solo apaga `loading` si la petición no fue cancelada, para que el indicador no desaparezca con otra petición en curso.
 - **Debounce:** evita una petición por cada tecla.
@@ -407,13 +422,15 @@ src/
 │   │
 │   ├── personajes/
 │   │   ├── PersonajeCard.jsx
-│   │   └── PersonajeList.jsx
+│   │   ├── PersonajeList.jsx
+│   │   └── ResultadosPersonajes.jsx
 │   │
 │   └── ui/
 │       ├── Cargando.jsx
 │       ├── ConfirmationModal.jsx
 │       ├── MensajeError.jsx
-│       └── Modal.jsx
+│       ├── Modal.jsx
+│       └── Paginacion.jsx
 │
 ├── constants/
 │   └── translations.js
@@ -511,6 +528,7 @@ Esta sección amplía la documentación anterior con detalles del comportamiento
 
 - Mientras se espera la respuesta se muestra un indicador de carga.
 - Si la búsqueda no encuentra personajes, se ofrece un botón para limpiar la búsqueda y el filtro.
+- Con una sola página de resultados no se muestra la paginación.
 - Si falla la conexión o el servidor, se muestra un mensaje de error claro en lugar de dejar la pantalla vacía.
 
 ## Preferencia inicial del tema
@@ -520,8 +538,8 @@ Esta sección amplía la documentación anterior con detalles del comportamiento
 
 ## Limitaciones conocidas
 
-- Cada búsqueda muestra hasta 20 resultados (la primera página que devuelve la API); no hay paginación.
 - Los datos de favoritos se guardan en el navegador: no se comparten entre dispositivos.
+- La paginación es secuencial (Anterior y Siguiente): no hay salto directo a una página.
 
 ---
 
@@ -530,6 +548,7 @@ Esta sección amplía la documentación anterior con detalles del comportamiento
 - Consumo de API con `fetch` y `async/await`.
 - `useState` y `useEffect` con array de dependencias y función de limpieza.
 - Cancelación de peticiones con `AbortController`.
+- Paginación del lado del servidor y reinicio de estado mediante `key`.
 - Custom Hooks.
 - Debounce.
 - Context API.
@@ -557,9 +576,10 @@ Durante el desarrollo del proyecto utilicé Claude (Anthropic) como apoyo para c
 - Traducción de las constantes de la API al español (`constants/translations.js`).
 - Favoritos y Context: `useFavoritos`, `FavoritosContext`.
 - Adaptación de los componentes a mis tokens de Tailwind (`index.css`) y al modo oscuro.
-- Vaciado de la lista de favoritos con `ConfirmationModal`, usando mi `Modal` genérico.
 - Revisión final del repositorio, que detectó puntos a corregir: el filtro por género se hacía en el cliente, un `try/catch` pisaba los mensajes de error HTTP, había archivos sin usar con imports rotos, el panel y la confirmación se cerraban juntos con Escape, y faltaban ajustes en `index.html` y en este README.
-- Funcionalidades que exploré con IA y que no están en esta versión final: paginación, filtros por estado y especie, y búsqueda por palabras clave escritas en la caja de búsqueda.
+- Paginación: parámetro `page` en el servicio, componente `Paginacion` y reinicio de la página con `key` en `ResultadosPersonajes`.
+- Funcionalidades que exploré con IA y que no están en esta versión final: filtros por estado y especie, y búsqueda por palabras clave escritas en la caja de búsqueda.
+- Implementacion de react-toastify para notificar cuando se agrega o elimina un personaje a la lista.
 
 ## Qué revisé o corregí manualmente
 
@@ -573,7 +593,7 @@ Durante el desarrollo del proyecto utilicé Claude (Anthropic) como apoyo para c
 - Consumo de una API pública con `fetch` y `useEffect`.
 - Manejo de estados de carga, error y "sin resultados".
 - Cancelación de peticiones y condiciones de carrera.
-- Filtros enviados a la API mediante parámetros de URL.
+- Filtros y paginación enviados a la API mediante parámetros de URL.
 - Buenas prácticas para Context API y Custom Hooks.
 - Adaptación de estilos con Tailwind CSS.
 - Revisión de código.
