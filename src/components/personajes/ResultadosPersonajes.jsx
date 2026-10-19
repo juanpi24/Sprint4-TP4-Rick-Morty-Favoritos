@@ -9,7 +9,7 @@ import { MensajeError } from "../ui/MensajeError.jsx";
 // cada búsqueda nueva crea una instancia nueva y "pagina" vuelve a 1 sola.
 export function ResultadosPersonajes({ nombre, genero, onLimpiar }) {
   const [pagina, setPagina] = useState(1);
-  const { personajes, paginas, loading, error } = useBuscarPersonajes(nombre, genero, pagina);
+  const { personajes, paginas, total, loading, error } = useBuscarPersonajes(nombre, genero, pagina);
 
   const cambiarPagina = (nueva) => {
     setPagina(nueva);
@@ -47,8 +47,17 @@ export function ResultadosPersonajes({ nombre, genero, onLimpiar }) {
   // Renderizado de la lista + paginación
   return (
     <div className="space-y-6">
+            <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined">
+                  person_search
+                </span>
+                <h2 className="text-lg font-bold text-primary">
+                    Total: {total}
+                </h2>
+           </div>
       <PersonajeList personajes={personajes} />
       <Paginacion pagina={pagina} paginas={paginas} onCambiar={cambiarPagina} />
     </div>
   );
 }
+

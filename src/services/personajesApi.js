@@ -39,8 +39,9 @@ export async function buscarPersonajes({ nombre, gender, pagina = 1 }, signal) {
   try {
     const data = await respuesta.json();
     return { 
-      personajes: data.results, 
-      paginas: data.info.pages 
+      personajes: data.results || [], // 👈 la lista de personajes de la página pedida
+      paginas: data.info?.pages || 0, // 👈 total de páginas
+      total: data.info?.count || 0 // 👈 total de personajes
     };
   } catch (err) {
     throw new Error("La respuesta del servidor no tiene un formato válido.", { cause: err });

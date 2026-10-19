@@ -5,6 +5,7 @@ import { buscarPersonajes } from "../services/personajesApi.js";
 export function useBuscarPersonajes(nombre, gender, pagina) {
   const [personajes, setPersonajes] = useState([]);
   const [paginas, setPaginas] = useState(0);
+  const [total, setTotal] = useState(0); // 👈 Nuevo estado para almacenar 'data.info.count'
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -18,7 +19,8 @@ export function useBuscarPersonajes(nombre, gender, pagina) {
       try {
         const datos = await buscarPersonajes({ nombre, gender, pagina }, controller.signal);
         setPersonajes(datos.personajes); // Actualizar la lista de personajes
-        setPaginas(datos.paginas); // Actualizar el total de páginas
+        setPaginas(datos.paginas); // actualizar el total de páginas
+        setTotal(datos.total); // actualizar el total de personajes
       } catch (err) {
         // Un abort es esperado (el usuario cambió la búsqueda): no es un error
         if (err.name !== "AbortError") {
@@ -37,5 +39,5 @@ export function useBuscarPersonajes(nombre, gender, pagina) {
     return () => controller.abort();
   }, [nombre, gender, pagina]);
 
-  return { personajes, paginas, loading, error };
+  return { personajes, paginas, total, loading, error };
 }
