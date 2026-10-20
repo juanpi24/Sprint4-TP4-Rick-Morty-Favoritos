@@ -4,6 +4,14 @@ const API_URL = import.meta.env.VITE_API_URL;
 // Devuelve un objeto con la lista de personajes, el total de páginas y el total de personajes.
 export async function buscarPersonajes({ nombre = '', gender = '', pagina = 1 } = {}, signal) {
 
+// 1. VALIDACIÓN ANTICIPADA DE RED: Si está offline, lanzamos el error de inmediato
+  if (!navigator.onLine) {
+    throw new Error(
+      'No tenés conexión a internet. Revisá tu Wi-Fi o datos móviles e intentá de nuevo.'
+    );
+  }
+
+
   // Validación de la URL de la API
   if (!API_URL) {
     throw new Error(
