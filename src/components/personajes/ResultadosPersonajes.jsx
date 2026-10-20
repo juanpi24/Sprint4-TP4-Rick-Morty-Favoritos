@@ -1,19 +1,23 @@
-import { useState } from "react";
-import { useBuscarPersonajes } from "../../hooks/useBuscarPersonajes.js";
-import { PersonajeList } from "./PersonajeList.jsx";
-import { Paginacion } from "../ui/Paginacion.jsx";
-import { Cargando } from "../ui/Cargando.jsx";
-import { MensajeError } from "../ui/MensajeError.jsx";
+import { useState } from 'react';
+import { useBuscarPersonajes } from '../../hooks/useBuscarPersonajes.js';
+import { PersonajeList } from './PersonajeList.jsx';
+import { Paginacion } from '../ui/Paginacion.jsx';
+import { Cargando } from '../ui/Cargando.jsx';
+import { MensajeError } from '../ui/MensajeError.jsx';
 
 // BuscadorBar lo monta con una key que cambia con el nombre y el género:
 // cada búsqueda nueva crea una instancia nueva y "pagina" vuelve a 1 sola.
 export function ResultadosPersonajes({ nombre, genero, onLimpiar }) {
   const [pagina, setPagina] = useState(1);
-  const { personajes, paginas, total, loading, error } = useBuscarPersonajes(nombre, genero, pagina);
+  const { personajes, paginas, total, loading, error } = useBuscarPersonajes(
+    nombre,
+    genero,
+    pagina,
+  );
 
   const cambiarPagina = (nueva) => {
     setPagina(nueva);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   if (loading) return <Cargando />;
@@ -30,7 +34,8 @@ export function ResultadosPersonajes({ nombre, genero, onLimpiar }) {
           No encontramos resultados para tu búsqueda
         </h4>
         <p className="text-sm text-on-surface-variant max-w-xs">
-          Probá con otro nombre o seleccionando otra categoría en los botones superiores.
+          Probá con otro nombre o seleccionando otra categoría en los botones
+          superiores.
         </p>
 
         <button
@@ -47,17 +52,14 @@ export function ResultadosPersonajes({ nombre, genero, onLimpiar }) {
   // Renderizado de la lista + paginación
   return (
     <div className="space-y-6">
-            <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined">
-                  person_search
-                </span>
-                <h2 className="text-lg font-bold text-primary">
-                    Total: {total}
-                </h2>
-           </div>
+      <div className="flex items-center gap-2">
+        <span className="material-symbols-outlined">person_search</span>
+        <h2 className="text-lg font-bold text-primary">
+          {total} {total === 1 ? 'personaje' : 'personajes'} encontrados
+        </h2>
+      </div>
       <PersonajeList personajes={personajes} />
       <Paginacion pagina={pagina} paginas={paginas} onCambiar={cambiarPagina} />
     </div>
   );
 }
-
