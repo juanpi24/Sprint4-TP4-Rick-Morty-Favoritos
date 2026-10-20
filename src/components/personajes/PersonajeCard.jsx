@@ -20,7 +20,7 @@ export function PersonajeCard({ personaje }) {
       {/* Género */}
       {personaje.gender && (
         <div className="flex items-center gap-3 text-on-surface-variant">
-          <span className="material-symbols-outlined text-[24px] select-none aria-hidden=true">
+          <span className="material-symbols-outlined text-[24px] select-none" aria-hidden="true">
             male
           </span>
           <p className="text-sm font-medium">
@@ -34,7 +34,7 @@ export function PersonajeCard({ personaje }) {
       {personaje.species && (
         <>
           <div className="flex items-center gap-3 text-on-surface-variant">
-            <span className="material-symbols-outlined text-[24px] select-none aria-hidden=true">
+            <span className="material-symbols-outlined text-[24px] select-none" aria-hidden="true">
               person
             </span>
             <p className="text-sm font-medium">
@@ -50,7 +50,7 @@ export function PersonajeCard({ personaje }) {
         <>
           <div className="flex items-center gap-3 text-on-surface-variant">
             <span
-              className={`material-symbols-outlined text-[24px] aria-hidden=true ${
+              className={`material-symbols-outlined text-[24px]" aria-hidden="true" ${
                 personaje.status === 'Alive'
                   ? 'text-primary'
                   : personaje.status === 'Dead'
@@ -82,7 +82,7 @@ export function PersonajeCard({ personaje }) {
       {personaje.origin?.name && (
         <>
           <div className="flex items-center gap-3 text-on-surface-variant">
-            <span className="material-symbols-outlined text-[24px] select-none aria-hidden=true">
+            <span className="material-symbols-outlined text-[24px] select-none" aria-hidden="true">
               public
             </span>
             <p className="text-sm font-medium">
@@ -104,7 +104,7 @@ export function PersonajeCard({ personaje }) {
           }`}
         >
           {/* Icono y texto dinámico basado en el estado "isInList" */}
-          <span className="material-symbols-outlined text-[18px] aria-hidden=true">
+          <span className="material-symbols-outlined text-[18px]" aria-hidden="true">
             {favorito ? 'delete' : 'add'}
           </span>
           <span>{favorito ? 'Quitar de favoritos' : 'Agregar a favoritos'}</span>

@@ -1,5 +1,5 @@
-import { createContext, useContext } from "react";
-import { useFavoritos } from "../hooks/useFavoritos.js";
+import { createContext, useContext } from 'react';
+import { useFavoritos } from '../hooks/useFavoritos.js';
 
 const FavoritosContext = createContext(null);
 
@@ -17,6 +17,9 @@ export function FavoritosProvider({ children }) {
 // eslint-disable-next-line react-refresh/only-export-components
 export function useFavoritosContext() {
   const ctx = useContext(FavoritosContext);
-  if (!ctx) throw new Error("useFavoritosContext debe usarse dentro de FavoritosProvider");
+  if (!ctx)
+    throw new Error(
+      'useFavoritosContext debe usarse dentro de FavoritosProvider',
+    );
   return ctx;
 }

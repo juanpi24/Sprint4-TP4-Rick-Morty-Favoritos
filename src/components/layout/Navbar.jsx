@@ -1,5 +1,5 @@
-import { useThemeContext } from "../../context/ThemeContext.jsx";
-import { useFavoritosContext } from "../../context/FavoritosContext.jsx";
+import { useThemeContext } from '../../context/ThemeContext.jsx';
+import { useFavoritosContext } from '../../context/FavoritosContext.jsx';
 
 export function Navbar({ onAbrirFavoritos }) {
   const { isDark, toggleTheme } = useThemeContext();
@@ -18,30 +18,37 @@ export function Navbar({ onAbrirFavoritos }) {
             Rick y Morty <span className="text-primary">Favoritos</span>
           </span>
         </div>
-                
-      <div className="flex items-center gap-2">
-         
-        <button
+
+        <div className="flex items-center gap-2">
+          <button
             onClick={toggleTheme}
             aria-label={isDark ? 'Activar modo claro' : 'Activar modo oscuro'}
             className="flex items-center justify-center w-9 h-9 rounded-full bg-surface-container-high border border-outline-variant/40 hover:bg-surface-container-highest transition-colors cursor-pointer"
           >
-            <span className="material-symbols-outlined text-on-surface text-lg aria-hidden=true">
+            <span
+              className="material-symbols-outlined text-on-surface text-lg"
+              aria-hidden="true"
+            >
               {isDark ? 'light_mode' : 'dark_mode'}
             </span>
-        </button>
+          </button>
 
           <button
             onClick={onAbrirFavoritos}
             aria-label="Abrir favoritos"
             className="relative flex items-center gap-2 bg-surface-container-high px-3.5 py-1.5 rounded-full border border-outline-variant/40 hover:bg-surface-container-highest transition-colors duration-150 active:scale-95 cursor-pointer"
           >
-            <span className="material-symbols-outlined text-primary text-[20px] aria-hidden=true">favorite</span>
+            <span
+              className="material-symbols-outlined text-primary text-[20px]"
+              aria-hidden="true"
+            >
+              favorite
+            </span>
             <span className="font-label-md text-sm text-on-surface font-medium hidden sm:inline">
               Mis Favoritos
             </span>
 
-             {favoritos.length > 0 && (
+            {favoritos.length > 0 && (
               <span className="bg-primary text-on-primary text-xs font-bold rounded-full min-w-5 h-5 flex items-center justify-center px-1">
                 {favoritos.length}
               </span>

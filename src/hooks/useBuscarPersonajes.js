@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { buscarPersonajes } from "../services/personajesApi.js";
+import { useEffect, useState } from 'react';
+import { buscarPersonajes } from '../services/personajesApi.js';
 
 // Pide los personajes a la API cada vez que cambia "nombre", "gender" o "pagina"
 export function useBuscarPersonajes(nombre, gender, pagina) {
@@ -17,13 +17,16 @@ export function useBuscarPersonajes(nombre, gender, pagina) {
       setError(null);
 
       try {
-        const datos = await buscarPersonajes({ nombre, gender, pagina }, controller.signal);
+        const datos = await buscarPersonajes(
+          { nombre, gender, pagina },
+          controller.signal,
+        );
         setPersonajes(datos.personajes); // Actualizar la lista de personajes
         setPaginas(datos.paginas); // actualizar el total de páginas
         setTotal(datos.total); // actualizar el total de personajes
       } catch (err) {
         // Un abort es esperado (el usuario cambió la búsqueda): no es un error
-        if (err.name !== "AbortError") {
+        if (err.name !== 'AbortError') {
           // El servicio ya arma un mensaje claro para cada caso (sin conexión, error HTTP, etc.)
           setError(err.message);
         }

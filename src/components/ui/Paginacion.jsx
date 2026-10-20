@@ -13,12 +13,12 @@ export function Paginacion({ pagina, paginas, onCambiar }) {
         disabled={pagina === 1}
         className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border border-outline-variant/40 bg-surface-container text-on-surface transition-colors duration-150 cursor-pointer hover:bg-surface-container-high disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-surface-container"
       >
-        <span className="material-symbols-outlined text-[18px]">
+        <span className="material-symbols-outlined text-[18px]" aria-hidden="true">
           chevron_left
         </span>
         Anterior
       </button>
-      <span className="text-sm text-on-surface-variant">
+      <span className="text-sm text-on-surface-variant" aria-hidden="true">
         Página <strong className="text-on-surface">{pagina}</strong> de{' '}
         {paginas}
       </span>

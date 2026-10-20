@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 import { useToggle } from '../../hooks/useToggle.js';
-import { useFavoritosContext } from '../../context/FavoritosContext.jsx';    
+import { useFavoritosContext } from '../../context/FavoritosContext.jsx';
 import { ConfirmationModal } from '../ui/ConfirmationModal.jsx';
-import { translateSpecies, translateStatus } from '../../constants/translations.js';
+import {
+  translateSpecies,
+  translateStatus,
+} from '../../constants/translations.js';
 
 /**
  * Componente FavoritosPanel: Panel lateral para mostrar la lista de favoritos.
@@ -11,20 +14,21 @@ import { translateSpecies, translateStatus } from '../../constants/translations.
  * @param {boolean} abierto - Indica si el panel está abierto.
  * @param {function} onCerrar - Función para cerrar el panel.
  */
-export function FavoritosPanel({abierto, onCerrar,}) {
+export function FavoritosPanel({ abierto, onCerrar }) {
   // Consumimos el contexto de favoritos tal como en FavoritosModal
   const { favoritos, toggleFavorito, vaciarFavoritos } = useFavoritosContext();
-  
+
   /* Usamos useToggle local para controlar el modal de confirmación*/
-   const [confirmando, , abrirConfirmacion, cerrarConfirmacion] = useToggle(false);
-  
+  const [confirmando, , abrirConfirmacion, cerrarConfirmacion] =
+    useToggle(false);
+
   // Bonus: Cierre del panel presionando la tecla Escape.
   // Mientras se confirma el vaciado no escuchamos Escape acá: lo maneja el ConfirmationModal,
   // así Escape cierra solo la confirmación y no las dos cosas a la vez.
   useEffect(() => {
     if (!abierto || confirmando) return;
 
-  // Bloquea el scroll de la página de fondo al abrirse
+    // Bloquea el scroll de la página de fondo al abrirse
     document.body.style.overflow = 'hidden';
 
     const handleKeyDown = (e) => {
@@ -36,16 +40,15 @@ export function FavoritosPanel({abierto, onCerrar,}) {
     window.addEventListener('keydown', handleKeyDown);
     // Limpieza: restablece el scroll y remueve el listener
     return () => {
-        document.body.style.overflow = '';
-        window.removeEventListener('keydown', handleKeyDown);
-    }
-      
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [abierto, confirmando, onCerrar]);
 
   // 1. Creamos la función para manejar la confirmación
   const handleConfirmarVaciado = () => {
     vaciarFavoritos(); // Vacía la lista
-    onCerrar();        // Cierra el panel de favoritos
+    onCerrar(); // Cierra el panel de favoritos
     // La confirmación la cierra el propio ConfirmationModal después de llamar a esta función
   };
 
@@ -63,11 +66,13 @@ export function FavoritosPanel({abierto, onCerrar,}) {
       {/* Drawer Lateral */}
       <aside className="fixed top-0 right-0 h-full w-80 max-w-[88vw] z-50 bg-surface-container border-l border-outline-variant/30 shadow-2xl flex flex-col justify-between p-6">
         <div className="flex flex-col h-full overflow-hidden">
-          
           {/* Header */}
           <div className="flex items-center justify-between pb-4 border-b border-outline-variant/30">
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary text-xl aria-hidden=true">
+              <span
+                className="material-symbols-outlined text-primary text-xl"
+                aria-hidden="true"
+              >
                 bookmark
               </span>
               <h2 className="text-lg font-bold text-on-surface">
@@ -82,7 +87,12 @@ export function FavoritosPanel({abierto, onCerrar,}) {
               aria-label="Cerrar panel"
               className="text-on-surface-variant hover:text-on-surface p-1 rounded-lg transition-colors cursor-pointer"
             >
-              <span className="material-symbols-outlined text-2xl aria-hidden=true">close</span>
+              <span
+                className="material-symbols-outlined text-2xl"
+                aria-hidden="true"
+              >
+                close
+              </span>
             </button>
           </div>
 
@@ -103,11 +113,15 @@ export function FavoritosPanel({abierto, onCerrar,}) {
           <div className="flex flex-col gap-3 mt-2 overflow-y-auto flex-1 pr-1">
             {favoritos.length === 0 ? (
               <div className="text-center py-8 text-on-surface-variant flex flex-col items-center justify-center h-full">
-                <span className="material-symbols-outlined text-4xl mb-2 text-on-surface-variant/50 aria-hidden=true">
+                <span
+                  className="material-symbols-outlined text-4xl mb-2 text-on-surface-variant/50"
+                  aria-hidden="true"
+                >
                   playlist_remove
                 </span>
                 <p className="text-sm max-w-50">
-                  Todavía no agregaste favoritos. Buscá un personaje y tocá "Agregar a favoritos".
+                  Todavía no agregaste favoritos. Buscá un personaje y tocá
+                  "Agregar a favoritos".
                 </p>
               </div>
             ) : (
@@ -128,7 +142,8 @@ export function FavoritosPanel({abierto, onCerrar,}) {
                         {personaje.name}
                       </span>
                       <span className="text-[11px] text-on-surface-variant truncate">
-                        {translateSpecies(personaje.species)} · {translateStatus(personaje.status)}
+                        {translateSpecies(personaje.species)} ·{' '}
+                        {translateStatus(personaje.status)}
                       </span>
                     </div>
                   </div>
@@ -156,7 +171,12 @@ export function FavoritosPanel({abierto, onCerrar,}) {
             disabled={favoritos.length === 0}
             className="w-full py-2.5 rounded-xl bg-error-container text-on-error-container hover:bg-error-container/80 font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            <span className="material-symbols-outlined text-sm aria-hidden=true">delete_sweep</span>
+            <span
+              className="material-symbols-outlined text-sm"
+              aria-hidden="true"
+            >
+              delete_sweep
+            </span>
             Vaciar favoritos
           </button>
         </div>

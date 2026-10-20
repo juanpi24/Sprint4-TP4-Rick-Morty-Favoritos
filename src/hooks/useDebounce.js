@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 // Devuelve el valor recién después de que el usuario dejó de escribir "delay" ms
 export function useDebounce(valor, delay = 400) {

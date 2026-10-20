@@ -14,7 +14,9 @@ export function ThemeProvider({ children }) {
   // preferencia de tema del sistema operativo del usuario. Después de
   // esa primera vez, useLocalStorage toma el control y persiste lo que
   // el usuario haya elegido a mano.
-  const prefiereOscuro = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const prefiereOscuro = window.matchMedia(
+    '(prefers-color-scheme: dark)',
+  ).matches;
   const [isDark, setIsDark] = useLocalStorage('theme-mode', prefiereOscuro);
 
   // Este useEffect habla con el DOM, no con React: agrega o saca la
@@ -48,7 +50,9 @@ export function useThemeContext() {
   const contexto = useContext(ThemeContext);
 
   if (!contexto) {
-    throw new Error('useThemeContext() tiene que usarse adentro de <ThemeProvider>');
+    throw new Error(
+      'useThemeContext() tiene que usarse adentro de <ThemeProvider>',
+    );
   }
 
   return contexto;

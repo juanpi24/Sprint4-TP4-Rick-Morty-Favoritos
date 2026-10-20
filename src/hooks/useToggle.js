@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 // Estado booleano reutilizable: [estado, toggle, abrir, cerrar]
 export function useToggle(initialState = false) {
