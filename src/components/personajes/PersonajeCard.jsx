@@ -50,13 +50,13 @@ export function PersonajeCard({ personaje }) {
         <>
           <div className="flex items-center gap-3 text-on-surface-variant">
             <span
-              className={`material-symbols-outlined text-[24px]" aria-hidden="true" ${
+              className={`material-symbols-outlined text-[24px]" ${
                 personaje.status === 'Alive'
                   ? 'text-primary'
                   : personaje.status === 'Dead'
                     ? 'text-error'
                     : 'text-on-surface-variant'
-              }`}
+              }`} aria-hidden="true"
             >
               {personaje.status === 'Alive' ? 'favorite' : personaje.status === 'Dead' ? 'heart_broken' : 'help'}
             </span>

@@ -55,7 +55,7 @@ export function ResultadosPersonajes({ nombre, genero, onLimpiar }) {
       <div className="flex items-center gap-2">
         <span className="material-symbols-outlined">person_search</span>
         <h2 className="text-lg font-bold text-primary">
-          {total} {total === 1 ? 'personaje' : 'personajes'} encontrados
+          {total} {total === 1 ? 'personaje encontrado' : 'personajes encontrados'}
         </h2>
       </div>
       <PersonajeList personajes={personajes} />
